@@ -29,11 +29,22 @@ async def rank(ctx, member: discord.Member = None):
         embed.add_field(name=" - Développeur débutant : ", value=" x", inline=False)
         await bot.say(embed=embed)
     else:
-        mb_role = discord.Object(id=member.id).roles
+        mb_role = ctx.message.server.get_member(member.id).roles
+        mb_role_str = ""
+        confirm = "Non"
+        debutant = "Non"
+        for rl in mb_role:
+            role = str(rl)
+            if role.find("@everyone") == -1:
+                mb_role_str = "%s / %s"%(mb_role_str, rl)
+            if role == "Développeur confirmé":
+                confirm = "Oui"
+            if role == "Développeur débutant":
+                debutant = "Oui"
         embed=discord.Embed(title="Grade de %s"%(member), color=0x0080c0)
-        embed.add_field(name=" - Développeur confirmé : ", value=" x", inline=True)
-        embed.add_field(name=" - Développeur débutant : ", value=" x", inline=False)
-        embed.add_field(name=" - Roles : ", value=" {0}".format(mb_role), inline=False)
+        embed.add_field(name=" - Développeur confirmé : ", value=" " + confirm, inline=True)
+        embed.add_field(name=" - Développeur débutant : ", value=" " + debutant, inline=False)
+        embed.add_field(name=" - Roles : ", value=" {0}".format(mb_role_str), inline=False)
         await bot.say(embed=embed)
 
 
